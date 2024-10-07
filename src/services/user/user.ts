@@ -14,8 +14,4 @@ const updateUser = async (where: Prisma.UserWhereUniqueInput, data: Prisma.UserU
   return await prisma.user.update({ where, data });
 };
 
-const deactivateUser = async (where: Prisma.UserWhereUniqueInput) => {
-  return await prisma.user.update({ where, data: { isActivated: false } });
-};
-
-export { createUser, getUser, updateUser, deactivateUser };
+export { createUser, getUser, updateUser };

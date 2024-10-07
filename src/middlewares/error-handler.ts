@@ -7,7 +7,6 @@ const errorConverter = (err: Error, req: Request, res: Response, next: NextFunct
   let error = err;
 
   if (!(error instanceof ApiError)) {
-    console.log(err);
     let statusCode = httpStatus.INTERNAL_SERVER_ERROR;
     let message = error.message || httpStatus[500];
 

@@ -27,6 +27,7 @@ const tokenExtractor = (role: 'USER' | 'ADMIN' = 'USER') => {
     } else {
       throw new ApiError(httpStatus.UNAUTHORIZED, 'Token is missing');
     }
+    next();
   };
 };
 

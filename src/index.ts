@@ -1,8 +1,10 @@
 import express from 'express';
-import authRouter from './controllers/auth';
+import authRouter from './controllers/user/auth';
 import helmet from 'helmet';
 import cors from 'cors';
 import { errorConverter, errorHandler } from './middlewares/error-handler';
+import adminAuthRouter from './controllers/admin/auth';
+import adminUserRouter from './controllers/admin/user';
 
 const app = express();
 const port = process.env.PORT || 5000;
@@ -19,7 +21,12 @@ app.get('/healthcheck', (req, res) => {
   res.json({ status: 'ok' });
 });
 
+// user routers
 app.use('/auth', authRouter);
+
+// admin routers
+app.use('/admin/auth', adminAuthRouter);
+app.use('/admin/user', adminUserRouter);
 
 // convert error to ApiError, if needed
 app.use(errorConverter);

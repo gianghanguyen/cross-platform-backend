@@ -1,12 +1,12 @@
 import httpStatus from 'http-status';
-import ApiError from '../utils/api-error';
-import { comparePassword, hashPassword } from '../utils/hashing';
+import ApiError from '../../utils/api-error';
+import { comparePassword, hashPassword } from '../../utils/hashing';
 import { createUser, getUser } from './user';
 import jwt from 'jsonwebtoken';
 import { createClient } from 'redis';
 
 const redisClient = createClient({
-  url: process.env.REDIS_URL_CLOUD || process.env.REDIS_URL_LOCAL,
+  url: process.env.REDIS_URL,
 });
 
 redisClient
@@ -71,18 +71,18 @@ const refreshToken = async (refreshToken: string) => {
   };
 };
 
-const createAuthResponse = (user: { id: number; email: string }) => {
+const createAuthResponse = (payload: Payload) => {
   const accessToken = generateToken(
-    { id: user.id, email: user.email },
+    payload,
     process.env.JWT_ACCESS_TOKEN_SECRET || '',
     process.env.JWT_ACCESS_TOKEN_EXPIRE || '',
   );
   const refreshToken = generateToken(
-    { id: user.id, email: user.email },
+    { id: payload.id, email: payload.email },
     process.env.JWT_REFRESH_TOKEN_SECRET || '',
     process.env.JWT_REFRESH_TOKEN_EXPIRE || '',
   );
-  redisClient.hSet(user.id.toString(), refreshToken, accessToken);
+  redisClient.hSet(payload.id.toString(), refreshToken, accessToken);
   return {
     accessToken,
     refreshToken,
