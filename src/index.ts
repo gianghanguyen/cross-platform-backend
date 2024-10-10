@@ -1,10 +1,11 @@
-import express from 'express';
+import express, { Request, Response } from 'express';
 import authRouter from './controllers/user/auth';
 import helmet from 'helmet';
 import cors from 'cors';
 import { errorConverter, errorHandler } from './middlewares/error-handler';
 import adminAuthRouter from './controllers/admin/auth';
 import adminUserRouter from './controllers/admin/user';
+import groupRouter from './controllers/user/group';
 
 const app = express();
 const port = process.env.PORT || 5000;
@@ -17,12 +18,13 @@ app.use(helmet());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.get('/healthcheck', (req, res) => {
-  res.json({ status: 'ok' });
+app.get('/healthcheck', (req: Request, res: Response) => {
+  res.status(200).json({ message: 'OK' });
 });
 
 // user routers
 app.use('/auth', authRouter);
+app.use('/group', groupRouter);
 
 // admin routers
 app.use('/admin/auth', adminAuthRouter);

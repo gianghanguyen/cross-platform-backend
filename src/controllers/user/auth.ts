@@ -6,14 +6,12 @@ import httpStatus from 'http-status';
 const authRouter = Router();
 
 authRouter.post('/login', async (req: Request, res: Response) => {
-  console.log(req.body);
   const { email, password } = req.body;
   const token = await logIn({ email, password });
   res.json(token);
 });
 
 authRouter.post('/register', async (req: Request, res: Response) => {
-  console.log(req.body);
   const { email, password } = req.body;
   const token = await register({ email, password });
   res.json(token);
