@@ -1,6 +1,7 @@
 import { Response, Router, Request } from 'express';
 import { tokenExtractor } from '~/middlewares/auth';
 import { createGroup, manageMember, groupInfo, updateGroup, getGroups } from '~/services/user/group';
+import { groupValidation } from '~/validations/group';
 import httpStatus from 'http-status-codes';
 import 'express-async-errors';
 
@@ -19,14 +20,14 @@ groupRouter.get('/', async (req: Request, res: Response) => {
   res.status(httpStatus.OK).json(groups);
 });
 
-groupRouter.post('/', async (req: Request, res: Response) => {
+groupRouter.post('/', groupValidation.create, async (req: Request, res: Response) => {
   const user = req.user;
   const data = req.body;
   const group = await createGroup(data, Number(user.id));
   res.status(httpStatus.CREATED).json(group);
 });
 
-groupRouter.patch('/:id', async (req: Request, res: Response) => {
+groupRouter.patch('/:id', groupValidation.update, async (req: Request, res: Response) => {
   const user = req.user;
   const groupId = req.params.id;
   const data = req.body;
@@ -34,7 +35,7 @@ groupRouter.patch('/:id', async (req: Request, res: Response) => {
   res.status(httpStatus.OK).json(group);
 });
 
-groupRouter.patch('/:groupId/user', async (req: Request, res: Response) => {
+groupRouter.patch('/:groupId/user', groupValidation.manageMember, async (req: Request, res: Response) => {
   const user = req.user;
   const { groupId } = req.params;
   const userIds = req.body.userIds;
