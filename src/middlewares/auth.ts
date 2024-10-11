@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import ApiError from '../utils/api-error';
-import httpStatus from 'http-status';
+import httpStatus from 'http-status-codes';
 
 const tokenExtractor = (role: 'USER' | 'ADMIN' = 'USER') => {
   return (req: Request, res: Response, next: NextFunction) => {
@@ -17,7 +17,11 @@ const tokenExtractor = (role: 'USER' | 'ADMIN' = 'USER') => {
           id: number;
           email: string;
         };
-      } catch {
+      } catch (error: any) {
+        if (error?.message?.includes('jwt expired')) {
+          throw new ApiError(httpStatus.GONE, 'Need to refresh token.');
+        }
+
         throw new ApiError(httpStatus.UNAUTHORIZED, 'Invalid token');
       }
     } else {

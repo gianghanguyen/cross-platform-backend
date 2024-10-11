@@ -3,7 +3,7 @@ import { createAdmin, findAdmin, updateAdmin } from './admin';
 import { comparePassword, hashPassword } from '~/utils/hashing';
 import * as jwt from 'jsonwebtoken';
 import { createClient } from 'redis';
-import httpStatus from 'http-status';
+import httpStatus from 'http-status-codes';
 
 type Payload = { id: number; email: string };
 const redisClient = createClient({
@@ -26,12 +26,12 @@ redisClient.on('error', (err) => {
 const adminLogin = async (email: string, password: string) => {
   const admin = await findAdmin({ email });
   if (!admin) {
-    throw new ApiError(400, 'Admin not found');
+    throw new ApiError(httpStatus.BAD_REQUEST, 'Admin not found');
   }
 
   const isMatch = await comparePassword(password, admin.password);
   if (!isMatch) {
-    throw new ApiError(400, 'Wrong password or email');
+    throw new ApiError(httpStatus.BAD_REQUEST, 'Wrong password or email');
   }
   return createAuthResponse({ id: admin.id, email: admin.email });
 };

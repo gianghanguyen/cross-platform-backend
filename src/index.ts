@@ -6,6 +6,7 @@ import { errorConverter, errorHandler } from './middlewares/error-handler';
 import adminAuthRouter from './controllers/admin/auth';
 import adminUserRouter from './controllers/admin/user';
 import groupRouter from './controllers/user/group';
+import presignedUrlRouter from './controllers/common/presignedUrl';
 
 const app = express();
 const port = process.env.PORT || 5000;
@@ -29,6 +30,9 @@ app.use('/group', groupRouter);
 // admin routers
 app.use('/admin/auth', adminAuthRouter);
 app.use('/admin/user', adminUserRouter);
+
+// common
+app.use('/presigned-url', presignedUrlRouter);
 
 // convert error to ApiError, if needed
 app.use(errorConverter);
