@@ -1,13 +1,17 @@
 import express from 'express';
-import authRouter from './controllers/user/auth';
 import helmet from 'helmet';
 import cors from 'cors';
 import { errorConverter, errorHandler } from './middlewares/error-handler';
+
+import userAuthRouter from './controllers/user/auth';
 import adminAuthRouter from './controllers/admin/auth';
 import adminUserRouter from './controllers/admin/user';
+import profileRouter from './controllers/profile';
+import connectCloudinary from './utils/cloudinary';
 
 const app = express();
 const port = process.env.PORT || 5000;
+connectCloudinary();
 
 app.use(cors());
 app.options('*', cors());
@@ -22,11 +26,14 @@ app.get('/healthcheck', (req, res) => {
 });
 
 // user routers
-app.use('/auth', authRouter);
+app.use('/user/auth', userAuthRouter);
 
 // admin routers
 app.use('/admin/auth', adminAuthRouter);
 app.use('/admin/user', adminUserRouter);
+
+// profile router
+app.use('/profile', profileRouter);
 
 // convert error to ApiError, if needed
 app.use(errorConverter);
