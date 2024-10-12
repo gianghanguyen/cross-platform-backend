@@ -31,4 +31,4 @@ const tokenExtractor = (role: 'USER' | 'ADMIN' = 'USER') => {
   };
 };
 
-export { tokenExtractor };
+export { tokenExtractor, CustomRequest };
