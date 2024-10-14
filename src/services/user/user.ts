@@ -10,8 +10,16 @@ const getUser = async (data: Prisma.UserWhereUniqueInput) => {
   return await prisma.user.findUnique({ where: data });
 };
 
+const getAllUser = async () => {
+  return await prisma.user.findMany();
+}
+
 const updateUser = async (where: Prisma.UserWhereUniqueInput, data: Prisma.UserUpdateInput) => {
   return await prisma.user.update({ where, data });
 };
 
-export { createUser, getUser, updateUser };
+const deleteUser = async (where: Prisma.UserWhereUniqueInput) => {
+  return await prisma.user.delete({ where });
+}
+
+export { createUser, getUser, updateUser, getAllUser, deleteUser };

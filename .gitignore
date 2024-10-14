@@ -6,4 +6,4 @@ dist/
 package-lock.json
 yarn.lock
 
-prisma/migrations/
+prisma/migrations

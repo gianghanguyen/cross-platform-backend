@@ -3,6 +3,10 @@ import jwt from 'jsonwebtoken';
 import ApiError from '../utils/api-error';
 import httpStatus from 'http-status-codes';
 
+interface CustomRequest extends Request {
+  user: { id: number; email: string };
+}
+
 const tokenExtractor = (role: 'USER' | 'ADMIN' = 'USER') => {
   return (req: Request, res: Response, next: NextFunction) => {
     let jwtSecret = process.env.JWT_ACCESS_TOKEN_SECRET || '';
@@ -31,4 +35,4 @@ const tokenExtractor = (role: 'USER' | 'ADMIN' = 'USER') => {
   };
 };
 
-export { tokenExtractor };
+export { tokenExtractor, CustomRequest };
