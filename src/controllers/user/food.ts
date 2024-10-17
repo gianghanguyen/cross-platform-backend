@@ -13,7 +13,10 @@ foodRouter.use(tokenExtractor('USER'));
 foodRouter.post('/', upload.single('image'), async (req: CustomRequest, res: Response) => {
   const { name, category, unit } = req.body;
   const image = req.file;
-  const imageURL = (await cloudinary.uploader.upload(image!.path, { resource_type: 'image' })).secure_url;
+  let imageURL = null;
+  if (image) {
+    imageURL = (await cloudinary.uploader.upload(image!.path, { resource_type: 'image' })).secure_url;
+  }
   const data = {
     name: name,
     imageURL: imageURL,
@@ -42,6 +45,7 @@ foodRouter.patch('/:id', upload.single('image'), async (req: CustomRequest, res:
   if (category) updateData.category = { connect: { name: category } };
   if (unit) updateData.unit = { connect: { name: unit } };
   if (image) {
+    console.log('image', image);
     const imageURL = (await cloudinary.uploader.upload(image!.path, { resource_type: 'image' })).secure_url;
     updateData.imageURL = imageURL;
   }

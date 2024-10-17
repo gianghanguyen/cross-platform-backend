@@ -6,6 +6,7 @@
 
 generator client {
   provider = "prisma-client-js"
+  previewFeatures = ["fullTextSearch", "fullTextIndex"]
 }
 
 datasource db {
@@ -17,13 +18,16 @@ model User {
   id          Int      @id @default(autoincrement())
   email       String   @unique
   password    String
-  isActivated Boolean  @default(false)
+  isActivated Boolean  @default(true)
   isVerified  Boolean  @default(false)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   Profile     Profile?
   Food        Food[]
   groups      UserGroup[]
+  recipes     Recipe[]
+  fridgeItems FridgeItem[]  
+  mealPlan    MealPlan[]   
 }
 
 model Profile {
@@ -106,15 +110,61 @@ model UnitOfMeasure {
 }
 
 model Food {
-  id         Int           @id @default(autoincrement())
-  name       String        @unique
-  imageURL  String
-  userId     Int
-  categoryId Int
-  unitId     Int
-  createdAt  DateTime      @default(now())
-  updatedAt  DateTime      @updatedAt
-  category   Category      @relation(fields: [categoryId], references: [id])
-  unit       UnitOfMeasure @relation(fields: [unitId], references: [id])
-  user       User          @relation(fields: [userId], references: [id])
+  id          Int           @id @default(autoincrement())
+  name        String        @unique
+  imageURL    String?
+  userId      Int
+  categoryId  Int
+  unitId      Int
+  mealPlans   MealPlan[]
+  fridgeItems FridgeItem[]
+  recipes     Recipe[]
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  category    Category      @relation(fields: [categoryId], references: [id])
+  unit        UnitOfMeasure @relation(fields: [unitId], references: [id])
+  user        User          @relation(fields: [userId], references: [id])
+}
+
+model Recipe {
+  id          Int           @id @default(autoincrement())
+  name        String 
+  description String?
+  htmlContent String?
+  foods       Food[]
+  creatorId   Int
+  creator     User          @relation(fields: [creatorId], references: [id])
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+} 
+
+model FridgeItem {
+  id          Int           @id @default(autoincrement())
+  quantity    Int
+  note        String?
+  startedDate DateTime
+  expiredDate DateTime
+  userId      Int
+  user        User          @relation(fields: [userId], references: [id])
+  foodId      Int      
+  food        Food          @relation(fields: [foodId], references: [id])
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+}
+
+model MealPlan {
+  id          Int           @id @default(autoincrement())
+  name        String
+  timestamp   DateTime
+  status      MealPlanStatus
+  foods       Food[]
+  creatorId   Int
+  user        User          @relation(fields: [creatorId], references: [id])
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime      @updatedAt
+}
+
+enum MealPlanStatus {
+  DONE
+  NOT_PASS_YET
 }
