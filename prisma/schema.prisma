@@ -14,11 +14,107 @@ datasource db {
 }
 
 model User {
+  id          Int      @id @default(autoincrement())
+  email       String   @unique
+  password    String
+  isActivated Boolean  @default(false)
+  isVerified  Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  Profile     Profile?
+  Food        Food[]
+  groups      UserGroup[]
+}
+
+model Profile {
+  id        Int      @id @default(autoincrement())
+  userId    Int      @unique
+  role      Role     @default(USER)
+  language  Language @default(EN)
+  gender    Gender
+  timezone  Int      @default(7)
+  birthDate DateTime
+  photoURL  String
+  deviceId  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id])
+}
+
+enum Gender {
+  MALE
+  FEMALE
+  OTHER
+}
+
+enum Language {
+  EN
+  VN
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+model Admin {
   id            Int       @default(autoincrement()) @id
   email         String    @unique
   password      String
-  isActivated   Boolean   @default(false)
-  isVerified    Boolean   @default(false)
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
+}
+
+model Group {
+  id            Int       @default(autoincrement()) @id
+  name          String    
+  photoUrl      String?
+  users         UserGroup[]
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
+
+model UserGroup {
+  userId        Int       
+  user          User      @relation(fields: [userId], references: [id])
+  groupId       Int
+  group         Group     @relation(fields: [groupId], references: [id])
+  role          GroupRole @default(MEMBER)
+
+  @@id([userId, groupId]) 
+}
+
+enum GroupRole {
+  ADMIN
+  MEMBER
+}
+
+model Category {
+  id        Int      @id @default(autoincrement())
+  name      String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  Food      Food[]
+}
+
+model UnitOfMeasure {
+  id        Int      @id @default(autoincrement())
+  name      String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  Food      Food[]
+}
+
+model Food {
+  id         Int           @id @default(autoincrement())
+  name       String        @unique
+  imageURL  String
+  userId     Int
+  categoryId Int
+  unitId     Int
+  createdAt  DateTime      @default(now())
+  updatedAt  DateTime      @updatedAt
+  category   Category      @relation(fields: [categoryId], references: [id])
+  unit       UnitOfMeasure @relation(fields: [unitId], references: [id])
+  user       User          @relation(fields: [userId], references: [id])
 }

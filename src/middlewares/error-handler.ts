@@ -7,14 +7,16 @@ const errorConverter = (err: Error, req: Request, res: Response, next: NextFunct
   let error = err;
 
   if (!(error instanceof ApiError)) {
-    console.log(err);
     let statusCode = httpStatus.INTERNAL_SERVER_ERROR;
     let message = error.message || httpStatus[500];
 
     if (error instanceof Prisma.PrismaClientKnownRequestError) {
       statusCode = httpStatus.BAD_REQUEST;
       if (error.code === 'P2025') {
-        message = 'Invalid data.';
+        message = 'Resource not found.';
+      }
+      if (error.code === 'P2003') {
+        message = 'Foreign key constraint violated.';
       }
       if (error.code === 'P2002') {
         message = 'Unique constraint violation.';
