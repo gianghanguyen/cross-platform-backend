@@ -13,6 +13,7 @@ import categoryRouter from './controllers/admin/category';
 import measurementRouter from './controllers/admin/measurement';
 import foodRouter from './controllers/user/food';
 import recipeRouter from './controllers/user/recipe';
+import fridgeItemRouter from './controllers/user/fridgeItem';
 
 const app = express();
 const port = process.env.PORT || 5000;
@@ -49,6 +50,8 @@ app.use('/food', foodRouter);
 // recipe router
 app.use('/recipe', recipeRouter);
 
+// fridge item router
+app.use('/fridge-item', fridgeItemRouter);
 // convert error to ApiError, if needed
 app.use(errorConverter);
 

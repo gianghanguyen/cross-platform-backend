@@ -27,7 +27,7 @@ const createRecipe = async (
   });
 };
 
-const findRecipesById = async (id: number) => {
+const findRecipeById = async (id: number) => {
   return await prisma.recipe.findUnique({
     where: {
       id,
@@ -66,4 +66,4 @@ const deleteRecipe = async (id: number, userId: number) => {
   });
 };
 
-export { createRecipe, findRecipes, findRecipesById, updateRecipe, deleteRecipe };
+export { createRecipe, findRecipes, findRecipeById, updateRecipe, deleteRecipe };
