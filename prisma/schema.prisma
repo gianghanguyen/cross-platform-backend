@@ -156,10 +156,10 @@ model MealPlan {
   id          Int           @id @default(autoincrement())
   name        String
   timestamp   DateTime
-  status      MealPlanStatus
+  status      MealPlanStatus  @default(NOT_PASS_YET)
   foods       Food[]
   creatorId   Int
-  user        User          @relation(fields: [creatorId], references: [id])
+  creator        User          @relation(fields: [creatorId], references: [id])
   createdAt   DateTime      @default(now())
   updatedAt   DateTime      @updatedAt
 }

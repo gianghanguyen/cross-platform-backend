@@ -14,6 +14,7 @@ import measurementRouter from './controllers/admin/measurement';
 import foodRouter from './controllers/user/food';
 import recipeRouter from './controllers/user/recipe';
 import fridgeItemRouter from './controllers/user/fridgeItem';
+import mealPlanRouter from './controllers/user/mealPlan';
 
 const app = express();
 const port = process.env.PORT || 5000;
@@ -31,27 +32,21 @@ app.get('/healthcheck', (req: Request, res: Response) => {
   res.status(200).json({ message: 'OK' });
 });
 
-// user routers
-app.use('/user/auth', userAuthRouter);
-app.use('/group', groupRouter);
-
 // admin routers
 app.use('/admin/auth', adminAuthRouter);
 app.use('/admin/user', adminUserRouter);
 app.use('/admin/category', categoryRouter);
 app.use('/admin/measurement', measurementRouter);
 
-// profile router
+// user routers
+app.use('/user/auth', userAuthRouter);
+app.use('/group', groupRouter);
 app.use('/profile', profileRouter);
-
-// food router
 app.use('/food', foodRouter);
-
-// recipe router
 app.use('/recipe', recipeRouter);
-
-// fridge item router
 app.use('/fridge-item', fridgeItemRouter);
+app.use('/meal-plan', mealPlanRouter);
+
 // convert error to ApiError, if needed
 app.use(errorConverter);
 

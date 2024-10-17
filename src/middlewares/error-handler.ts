@@ -40,7 +40,11 @@ const errorHandler = (err: ApiError, req: Request, res: Response, next: NextFunc
     code: statusCode,
     message,
   };
-  res.status(statusCode).send({ response, stack });
+  if (process.env.NODE_ENV == 'development') {
+    res.status(statusCode).send({ response, stack });
+    return;
+  }
+  res.status(statusCode).send({ response });
 };
 
 export { errorConverter, errorHandler };

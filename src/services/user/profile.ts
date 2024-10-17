@@ -12,7 +12,7 @@ const getProfile = async (data: Prisma.ProfileWhereUniqueInput) => {
 
 const getAllProfile = async () => {
   return await prisma.profile.findMany();
-}
+};
 
 const updateProfile = async (where: Prisma.ProfileWhereUniqueInput, data: Prisma.ProfileUpdateInput) => {
   return await prisma.profile.update({ where, data });
@@ -20,6 +20,6 @@ const updateProfile = async (where: Prisma.ProfileWhereUniqueInput, data: Prisma
 
 const deleteProfile = async (where: Prisma.ProfileWhereUniqueInput) => {
   return await prisma.profile.delete({ where });
-}
+};
 
 export { createProfile, getProfile, updateProfile, getAllProfile, deleteProfile };

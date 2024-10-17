@@ -43,13 +43,17 @@ const findRecipes = async (query: Prisma.RecipeFindManyArgs) => {
   return await prisma.recipe.findMany(query);
 };
 
-const updateRecipe = async (id: number, userId: number, data: Prisma.RecipeUpdateInput) => {
+const updateRecipe = async (id: number, userId: number, data: { foodIds?: number[]; [key: string]: any }) => {
   return await prisma.recipe.update({
     where: {
       id,
       creatorId: userId,
     },
-    data,
+    data: {
+      foods: {
+        connect: data.foodIds ? data.foodIds.map((id) => ({ id })) : undefined,
+      },
+    },
     include: {
       creator: true,
       foods: true,
