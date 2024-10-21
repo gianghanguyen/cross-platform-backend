@@ -12,14 +12,17 @@ const getUnitOfMeasure = async (data: Prisma.UnitOfMeasureWhereUniqueInput) => {
 
 const getAllUnitOfMeasure = async () => {
   return await prisma.unitOfMeasure.findMany();
-}
+};
 
-const updateUnitOfMeasure = async (where: Prisma.UnitOfMeasureWhereUniqueInput, data: Prisma.UnitOfMeasureUpdateInput) => {
+const updateUnitOfMeasure = async (
+  where: Prisma.UnitOfMeasureWhereUniqueInput,
+  data: Prisma.UnitOfMeasureUpdateInput,
+) => {
   return await prisma.unitOfMeasure.update({ where, data });
 };
 
 const deleteUnitOfMeasure = async (where: Prisma.UnitOfMeasureWhereUniqueInput) => {
   return await prisma.unitOfMeasure.delete({ where });
-}
+};
 
 export { createUnitOfMeasure, getUnitOfMeasure, updateUnitOfMeasure, getAllUnitOfMeasure, deleteUnitOfMeasure };

@@ -39,7 +39,7 @@ const errorHandler = (err: ApiError, req: Request, res: Response, next: NextFunc
     code: statusCode,
     message,
   };
-  res.status(statusCode).send(response);
+  res.status(statusCode).send({ response, stack: err.stack });
 };
 
 export { errorConverter, errorHandler };
