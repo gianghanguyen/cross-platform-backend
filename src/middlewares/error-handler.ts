@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 import httpStatus from 'http-status';
 import ApiError from '../utils/api-error';
 import { Prisma } from '@prisma/client';
+import { error } from 'console';
 
 const errorConverter = (err: Error, req: Request, res: Response, next: NextFunction) => {
   let error = err;
@@ -34,12 +35,16 @@ const errorConverter = (err: Error, req: Request, res: Response, next: NextFunct
 };
 
 const errorHandler = (err: ApiError, req: Request, res: Response, next: NextFunction) => {
-  const { statusCode, message } = err;
+  const { statusCode, message, stack } = err;
   const response = {
     code: statusCode,
     message,
   };
-  res.status(statusCode).send({ response, stack: err.stack });
+  if (process.env.NODE_ENV == 'development') {
+    res.status(statusCode).send({ response, stack });
+    return;
+  }
+  res.status(statusCode).send({ response });
 };
 
 export { errorConverter, errorHandler };
