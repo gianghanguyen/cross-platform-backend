@@ -12,6 +12,9 @@ import profileRouter from './controllers/user/profile';
 import categoryRouter from './controllers/admin/category';
 import measurementRouter from './controllers/admin/measurement';
 import foodRouter from './controllers/user/food';
+import userShoppingListRouter from './controllers/user/shopping-list';
+import groupShoppingListRouter from './controllers/user/group/shopping-list';
+import taskRouter from './controllers/user/group/task';
 
 const app = express();
 const port = process.env.PORT || 5000;
@@ -31,19 +34,18 @@ app.get('/healthcheck', (req: Request, res: Response) => {
 
 // user routers
 app.use('/user/auth', userAuthRouter);
-app.use('/group', groupRouter);
+app.use('/user/group', groupRouter);
+app.use('/user/profile', profileRouter);
+app.use('/user/food', foodRouter);
+app.use('/user/shopping-list', userShoppingListRouter);
+app.use('/group/shopping-list', groupShoppingListRouter);
+app.use('/group/task', taskRouter);
 
 // admin routers
 app.use('/admin/auth', adminAuthRouter);
 app.use('/admin/user', adminUserRouter);
 app.use('/admin/category', categoryRouter);
 app.use('/admin/measurement', measurementRouter);
-
-// profile router
-app.use('/profile', profileRouter);
-
-// food router
-app.use('/food', foodRouter);
 
 // convert error to ApiError, if needed
 app.use(errorConverter);
