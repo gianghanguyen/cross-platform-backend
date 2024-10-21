@@ -14,16 +14,18 @@ datasource db {
 }
 
 model User {
-  id          Int      @id @default(autoincrement())
-  email       String   @unique
-  password    String
-  isActivated Boolean  @default(false)
-  isVerified  Boolean  @default(false)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  Profile     Profile?
-  Food        Food[]
-  groups      UserGroup[]
+  id           Int            @id @default(autoincrement())
+  email        String         @unique
+  password     String
+  isActivated  Boolean        @default(false)
+  isVerified   Boolean        @default(false)
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  Profile      Profile?
+  Food         Food[]
+  groups       UserGroup[]
+  ShoppingList ShoppingList[]
+  Task         Task[]
 }
 
 model Profile {
@@ -58,30 +60,31 @@ enum Role {
 }
 
 model Admin {
-  id            Int       @default(autoincrement()) @id
-  email         String    @unique
-  password      String
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  password  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Group {
-  id            Int       @default(autoincrement()) @id
-  name          String    
-  photoUrl      String?
-  users         UserGroup[]
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  id           Int            @id @default(autoincrement())
+  name         String
+  photoUrl     String?
+  users        UserGroup[]
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  ShoppingList ShoppingList[]
 }
 
 model UserGroup {
-  userId        Int       
-  user          User      @relation(fields: [userId], references: [id])
-  groupId       Int
-  group         Group     @relation(fields: [groupId], references: [id])
-  role          GroupRole @default(MEMBER)
+  userId  Int
+  user    User      @relation(fields: [userId], references: [id])
+  groupId Int
+  group   Group     @relation(fields: [groupId], references: [id])
+  role    GroupRole @default(MEMBER)
 
-  @@id([userId, groupId]) 
+  @@id([userId, groupId])
 }
 
 enum GroupRole {
@@ -108,7 +111,7 @@ model UnitOfMeasure {
 model Food {
   id         Int           @id @default(autoincrement())
   name       String        @unique
-  imageURL  String
+  imageURL   String
   userId     Int
   categoryId Int
   unitId     Int
@@ -117,4 +120,33 @@ model Food {
   category   Category      @relation(fields: [categoryId], references: [id])
   unit       UnitOfMeasure @relation(fields: [unitId], references: [id])
   user       User          @relation(fields: [userId], references: [id])
+  Task       Task[]
+}
+
+model ShoppingList {
+  id        Int      @id @default(autoincrement())
+  creatorId Int
+  groupId   Int?
+  name      String
+  note      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [creatorId], references: [id])
+  group     Group?    @relation(fields: [groupId], references: [id])
+  Task      Task[]   
+}
+
+model Task {
+  id             Int          @id @default(autoincrement())
+  shoppingListId Int
+  assigneeId     Int?
+  foodId         Int
+  deadline       DateTime
+  quantity       Int
+  done           Boolean      @default(false)
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  assignee       User?         @relation(fields: [assigneeId], references: [id])
+  food           Food         @relation(fields: [foodId], references: [id])
+  shoppingList   ShoppingList @relation(fields: [shoppingListId], references: [id])
 }
