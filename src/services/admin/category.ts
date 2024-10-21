@@ -12,7 +12,7 @@ const getCategory = async (data: Prisma.CategoryWhereUniqueInput) => {
 
 const getAllCategory = async () => {
   return await prisma.category.findMany();
-}
+};
 
 const updateCategory = async (where: Prisma.CategoryWhereUniqueInput, data: Prisma.CategoryUpdateInput) => {
   return await prisma.category.update({ where, data });
@@ -20,6 +20,6 @@ const updateCategory = async (where: Prisma.CategoryWhereUniqueInput, data: Pris
 
 const deleteCategory = async (where: Prisma.CategoryWhereUniqueInput) => {
   return await prisma.category.delete({ where });
-}
+};
 
 export { createCategory, getCategory, updateCategory, getAllCategory, deleteCategory };
