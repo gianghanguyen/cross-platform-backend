@@ -13,7 +13,7 @@ const createUserShoppingList = async (data: Prisma.ShoppingListCreateInput, user
       },
     },
     include: {
-      user: true,
+      task: true,
     },
   });
 };
@@ -27,7 +27,7 @@ const getAllUserShoppingList = async (userId: number) => {
       groupId: null,
     },
     include: {
-      user: true,
+      task: true,
     },
   });
 };
@@ -41,7 +41,7 @@ const getUserShoppingListInfo = async (shoppingListId: number, userId: number) =
       },
     },
     include: {
-      user: true,
+      task: true,
     },
   });
 };
@@ -56,7 +56,7 @@ const updateUserShoppingList = async (shoppingListId: number, userId: number, da
     },
     data,
     include: {
-      user: true,
+      task: true,
     },
   });
 };

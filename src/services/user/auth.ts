@@ -32,11 +32,11 @@ const logIn = async (data: { email: string; password: string }) => {
   }
 
   if (!user.isActivated) {
-    throw new ApiError(httpStatus.BAD_REQUEST, 'User is not activated');
+    throw new ApiError(httpStatus.FORBIDDEN, 'User is deactivated');
   }
 
   if (!user.isVerified) {
-    throw new ApiError(httpStatus.BAD_REQUEST, 'User is not verified');
+    throw new ApiError(httpStatus.FORBIDDEN, 'User is not verified');
   }
 
   const isMatch = await comparePassword(data.password, user.password);
