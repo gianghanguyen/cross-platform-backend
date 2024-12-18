@@ -96,4 +96,23 @@ const assigneeTask = async (
   });
 };
 
-export { createTask, updateTask, getAllTask, getTaskInfo, deleteTask, assigneeTask };
+const markTaskAsDoneOrUndone = async (
+  userId: number,
+  groupId: number,
+  shoppingListId: number,
+  taskId: number,
+  isDone: boolean,
+) => {
+  await checkIfTaskbelongsToShoppingList(shoppingListId, taskId);
+  await checkIfShoppingListBelongsToGroup(groupId, shoppingListId);
+  await checkIfUserIsGroupAdmin(userId, groupId);
+
+  return await prisma.task.update({
+    where: { id: taskId },
+    data: {
+      done: isDone,
+    },
+  });
+};
+
+export { createTask, updateTask, getAllTask, getTaskInfo, deleteTask, assigneeTask, markTaskAsDoneOrUndone };

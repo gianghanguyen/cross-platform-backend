@@ -1,5 +1,13 @@
 import { Request, Response, Router } from 'express';
-import { logIn, register, logout, refreshToken, verifyEmail, changePassword } from '../../services/user/auth'; // Thêm verifyEmail vào import
+import {
+  logIn,
+  register,
+  logout,
+  refreshToken,
+  verifyEmail,
+  changePassword,
+  verifyToken,
+} from '../../services/user/auth'; // Thêm verifyEmail vào import
 import 'express-async-errors';
 import httpStatus from 'http-status';
 import { CustomRequest, tokenExtractor } from '~/middlewares/auth';
@@ -36,6 +44,16 @@ userAuthRouter.get('/verify-email', async (req: Request, res: Response) => {
 
 userAuthRouter.put('/change-password', tokenExtractor('USER'), async (req: CustomRequest, res: Response) => {
   res.json(await changePassword(req.user!.id, req.body.password, req.body.newPassword));
+});
+
+userAuthRouter.get('/verify-token', async (req: Request, res: Response) => {
+  const { token } = req.body;
+  try {
+    const payload = verifyToken(token, process.env.JWT_ACCESS_TOKEN_SECRET || '');
+    res.json({ valid: true, payload });
+  } catch (error: any) {
+    res.status(httpStatus.UNAUTHORIZED).json({ valid: false, error: error.message });
+  }
 });
 
 export default userAuthRouter;
