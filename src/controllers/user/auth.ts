@@ -33,7 +33,7 @@ userAuthRouter.post('/logout', authValidation.refreshToken, async (req: Request,
   res.status(httpStatus.OK).json();
 });
 
-userAuthRouter.post('/refresh-token', authValidation.auth, async (req: Request, res: Response) => {
+userAuthRouter.post('/refresh-token', async (req: Request, res: Response) => {
   res.status(httpStatus.OK).json(await refreshToken(req.body.refreshToken));
 });
 
@@ -52,7 +52,7 @@ userAuthRouter.get('/verify-token', async (req: Request, res: Response) => {
     const payload = verifyToken(token, process.env.JWT_ACCESS_TOKEN_SECRET || '');
     res.json({ valid: true, payload });
   } catch (error: any) {
-    res.status(httpStatus.UNAUTHORIZED).json({ valid: false, error: error.message });
+    res.json({ valid: false, error: error.message });
   }
 });
 
