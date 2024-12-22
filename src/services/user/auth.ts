@@ -71,6 +71,7 @@ const register = async (data: { email: string; password: string }) => {
     subject: 'Verify your email',
     text: `Please verify your email by clicking on the following link: ${verificationLink}`,
   });
+  return { message: 'Registration successful! Please verify your email.' };
 };
 
 const logout = async (refreshToken: string) => {
@@ -104,6 +105,7 @@ const refreshToken = async (refreshToken: string) => {
   );
   redisClient.hSet(payload.id.toString(), refreshToken, accessToken);
   return {
+    userId: payload.id,
     accessToken,
     refreshToken,
   };
@@ -152,4 +154,4 @@ const verifyToken = (token: string, secret: string): Payload => {
   return jwt.verify(token, secret) as Payload;
 };
 
-export { logIn, register, logout, refreshToken, verifyEmail, changePassword };
+export { logIn, register, logout, refreshToken, verifyEmail, changePassword, verifyToken };
