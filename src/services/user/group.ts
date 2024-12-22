@@ -81,19 +81,21 @@ const updateGroup = async (groupId: number, userId: number, data: Prisma.GroupUp
       },
     },
     data,
+    include: {
+      users: true,
+    }
   });
 };
 
-const manageMember = async (groupId: number, memberIds: number[], userId: number, action: 'ADD' | 'REMOVE') => {
-  const data = {
-    users: {
-      [action === 'ADD' ? 'create' : 'deleteMany']: memberIds.map((id) => ({
-        userId: id,
-        role: GroupRole.MEMBER,
-      })),
-    },
-  };
-  await prisma.group.update({
+const addMembers = async (userId: number, groupId: number, emails: string[]) => {
+  const memberIds = await Promise.all(
+    emails.map(async (email) => {
+      const user = await prisma.user.findUnique({ where: { email } });
+      return user ? user.id : null;
+    }),
+  ).then((ids) => ids.filter((id) => id !== null));
+
+  return prisma.group.update({
     where: {
       id: groupId,
       users: {
@@ -109,8 +111,50 @@ const manageMember = async (groupId: number, memberIds: number[], userId: number
         },
       },
     },
-    data,
+    data: {
+      users: {
+        create: memberIds.map((id) => ({
+          userId: id,
+          role: GroupRole.MEMBER,
+        })),
+      },
+    },
+    include: {
+      users: true,
+    },
   });
 };
 
-export { createGroup, getGroups, groupInfo, updateGroup, deleteGroup, manageMember };
+const removeMembers = async (userId: number, groupId: number, userIds: number[]) => {
+  return prisma.group.update({
+    where: {
+      id: groupId,
+      users: {
+        some: {
+          userId,
+        },
+      },
+    },
+    data: {
+      users: {
+        deleteMany: {
+          AND: [
+            {
+              userId: {
+                in: userIds,
+              },
+            },
+            {
+              role: GroupRole.MEMBER,
+            },
+          ],
+        },
+      },
+    },
+    include: {
+      users: true,
+    },
+  });
+};
+
+export { createGroup, getGroups, groupInfo, updateGroup, deleteGroup, addMembers, removeMembers };

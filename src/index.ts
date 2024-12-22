@@ -36,10 +36,6 @@ app.get('/healthcheck', (req: Request, res: Response) => {
 });
 
 // user routers
-app.use('/user/auth', userAuthRouter);
-app.use('/user/group', groupRouter);
-app.use('/user/profile', profileRouter);
-app.use('/user/food', foodRouter);
 app.use('/user/shopping-list', userShoppingListRouter);
 app.use('/group/shopping-list', groupShoppingListRouter);
 app.use('/group/task', taskRouter);

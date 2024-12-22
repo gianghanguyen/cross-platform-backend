@@ -1,8 +1,10 @@
 import { Response, Router } from 'express';
 import { tokenExtractor, CustomRequest } from '~/middlewares/auth';
-import { createGroup, manageMember, groupInfo, updateGroup, getGroups } from '~/services/user/group';
+import { createGroup, groupInfo, updateGroup, getGroups, addMembers, removeMembers } from '~/services/user/group';
 import { groupValidation } from '~/validations/group';
+import upload from '~/middlewares/multer';
 import httpStatus from 'http-status-codes';
+import { v2 as cloudinary } from 'cloudinary';
 import 'express-async-errors';
 
 const groupRouter = Router();
@@ -27,21 +29,39 @@ groupRouter.post('/', groupValidation.create, async (req: CustomRequest, res: Re
   res.status(httpStatus.CREATED).json(group);
 });
 
-groupRouter.patch('/:id', groupValidation.update, async (req: CustomRequest, res: Response) => {
+groupRouter.patch('/:id', groupValidation.update, upload.single('image'), async (req: CustomRequest, res: Response) => {
   const user = req.user;
   const groupId = req.params.id;
-  const data = req.body;
+  let photoUrl = null;
+  if (req.file) {
+    photoUrl = (await cloudinary.uploader.upload(req.file!.path, { resource_type: 'image' })).secure_url;
+  }
+
+  const data = photoUrl ? { ...req.body, photoUrl } : req.body;
   const group = await updateGroup(Number(groupId), user.id, data);
   res.status(httpStatus.OK).json(group);
 });
 
-groupRouter.patch('/:groupId/user', groupValidation.manageMember, async (req: CustomRequest, res: Response) => {
-  const user = req.user;
-  const { groupId } = req.params;
-  const userIds = req.body.userIds;
-  const action = req.body.action;
-  await manageMember(Number(groupId), userIds, Number(user.id), action);
-  res.status(httpStatus.OK).json();
-});
+groupRouter.patch(
+  '/:groupId/add-member',
+  groupValidation.addMembersSchema,
+  async (req: CustomRequest, res: Response) => {
+    const user = req.user;
+    const { groupId } = req.params;
+    const updatedGroup = await addMembers(Number(user.id), Number(groupId), req.body.emails);
+    res.status(httpStatus.OK).json(updatedGroup);
+  },
+);
+
+groupRouter.patch(
+  '/:groupId/remove-member',
+  groupValidation.removeMembersSchema,
+  async (req: CustomRequest, res: Response) => {
+    const user = req.user;
+    const { groupId } = req.params;
+    const updatedGroup = await removeMembers(Number(user.id), Number(groupId), req.body.userIds);
+    res.status(httpStatus.OK).json(updatedGroup);
+  },
+);
 
 export default groupRouter;

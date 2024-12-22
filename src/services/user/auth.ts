@@ -122,6 +122,7 @@ const createAuthResponse = (payload: Payload) => {
   );
   redisClient.hSet(payload.id.toString(), refreshToken, accessToken);
   return {
+    userId: payload.id,
     accessToken,
     refreshToken,
   };
