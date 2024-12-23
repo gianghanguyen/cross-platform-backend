@@ -28,13 +28,24 @@ model User {
   recipes      Recipe[]
   fridgeItems  FridgeItem[]
   mealPlan     MealPlan[]
-  ShoppingList ShoppingList[]
-  Task         Task[]
+  shoppingList ShoppingList[]
+  task         Task[]
+  notificationToken NotificationToken[]
+}
+
+model NotificationToken {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  token     String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id])
 }
 
 model Profile {
   id        Int      @id @default(autoincrement())
   userId    Int      @unique
+  name      String
   role      Role     @default(USER)
   language  Language @default(EN)
   gender    Gender
@@ -127,7 +138,7 @@ model Food {
   category    Category      @relation(fields: [categoryId], references: [id])
   unit        UnitOfMeasure @relation(fields: [unitId], references: [id])
   user        User          @relation(fields: [userId], references: [id])
-  Task        Task[]
+  task        Task[]
 }
 
 model ShoppingList {
@@ -140,7 +151,7 @@ model ShoppingList {
   updatedAt DateTime @updatedAt
   user      User     @relation(fields: [creatorId], references: [id])
   group     Group?   @relation(fields: [groupId], references: [id])
-  Task      Task[]
+  task      Task[]
 }
 
 model Task {

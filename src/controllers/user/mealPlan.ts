@@ -13,10 +13,9 @@ import { mealPlanValidation } from '~/validations/mealPlan';
 const mealPlanRouter = Router();
 mealPlanRouter.use(tokenExtractor('USER'));
 
-mealPlanRouter.get('/', mealPlanValidation.query, async (req, res) => {
-  const query = req.query;
+mealPlanRouter.get('/', async (req, res) => {
   const userId = req.user.id;
-  const mealPlan = await findMealPlans(userId, query.day as unknown as Date);
+  const mealPlan = await findMealPlans(userId);
   res.status(httpStatus.OK).json(mealPlan);
 });
 

@@ -31,12 +31,12 @@ const logIn = async (data: { email: string; password: string }) => {
     throw new ApiError(httpStatus.BAD_REQUEST, 'User not found');
   }
 
-  // if (!user.isActivated) {
-  //   throw new ApiError(httpStatus.BAD_REQUEST, 'User is not activated');
-  // }
+  if (!user.isActivated) {
+    throw new ApiError(httpStatus.FORBIDDEN, 'User is deactivated');
+  }
 
   if (!user.isVerified) {
-    throw new ApiError(httpStatus.BAD_REQUEST, 'User is not verified');
+    throw new ApiError(httpStatus.FORBIDDEN, 'User is not verified');
   }
 
   const isMatch = await comparePassword(data.password, user.password);
@@ -105,6 +105,7 @@ const refreshToken = async (refreshToken: string) => {
   );
   redisClient.hSet(payload.id.toString(), refreshToken, accessToken);
   return {
+    userId: payload.id,
     accessToken,
     refreshToken,
   };
@@ -123,6 +124,7 @@ const createAuthResponse = (payload: Payload) => {
   );
   redisClient.hSet(payload.id.toString(), refreshToken, accessToken);
   return {
+    userId: payload.id,
     accessToken,
     refreshToken,
   };

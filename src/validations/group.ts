@@ -3,21 +3,24 @@ import { validationGenerator } from './generator';
 
 const createSchema = Joi.object({
   name: Joi.string().required(),
-  photoUrl: Joi.string().optional().uri(),
 });
 
-const manageSchema = Joi.object({
+const addMembersSchema = Joi.object({
+  emails: Joi.array().items().required(),
+});
+
+const removeMembersSchema = Joi.object({
   userIds: Joi.array().items(Joi.number()).required(),
-  action: Joi.string().valid('ADD', 'REMOVE').required(),
 });
 
 const updateSchema = Joi.object({
   name: Joi.string().optional(),
-  photoUrl: Joi.string().optional().uri(),
+  image: Joi.object().optional(),
 });
 
 export const groupValidation = {
   create: validationGenerator(createSchema),
-  manageMember: validationGenerator(manageSchema),
+  addMembersSchema: validationGenerator(addMembersSchema),
+  removeMembersSchema: validationGenerator(removeMembersSchema),
   update: validationGenerator(updateSchema),
 };

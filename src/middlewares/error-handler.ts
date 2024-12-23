@@ -2,7 +2,6 @@ import { NextFunction, Request, Response } from 'express';
 import httpStatus from 'http-status';
 import ApiError from '../utils/api-error';
 import { Prisma } from '@prisma/client';
-import { error } from 'console';
 
 const errorConverter = (err: Error, req: Request, res: Response, next: NextFunction) => {
   let error = err;

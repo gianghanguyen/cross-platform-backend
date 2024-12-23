@@ -18,8 +18,8 @@ profileRouter.post('/', upload.single('avatar'), async (req: CustomRequest, res:
 });
 
 profileRouter.get('/:id', async (req: CustomRequest, res: Response) => {
-  const userId = req.user!.id;
-  const profile = await getProfile(userId);
+  const userId = req.params.id;
+  const profile = await getProfile(Number(userId));
   res.status(httpStatus.OK).json(profile);
 });
 

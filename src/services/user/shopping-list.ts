@@ -52,7 +52,7 @@ const getUserShoppingListInfo = async (shoppingListId: number, userId: number) =
       },
     },
     include: {
-      user: true,
+      task: true,
     },
   });
 };
@@ -67,7 +67,7 @@ const updateUserShoppingList = async (shoppingListId: number, userId: number, da
     },
     data,
     include: {
-      user: true,
+      task: true,
     },
   });
 };
