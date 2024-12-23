@@ -31,9 +31,9 @@ const logIn = async (data: { email: string; password: string }) => {
     throw new ApiError(httpStatus.BAD_REQUEST, 'User not found');
   }
 
-  if (!user.isActivated) {
-    throw new ApiError(httpStatus.BAD_REQUEST, 'User is not activated');
-  }
+  // if (!user.isActivated) {
+  //   throw new ApiError(httpStatus.BAD_REQUEST, 'User is not activated');
+  // }
 
   if (!user.isVerified) {
     throw new ApiError(httpStatus.BAD_REQUEST, 'User is not verified');

@@ -18,6 +18,7 @@ import mealPlanRouter from './controllers/user/mealPlan';
 import userShoppingListRouter from './controllers/user/shopping-list';
 import groupShoppingListRouter from './controllers/user/group/shopping-list';
 import taskRouter from './controllers/user/group/task';
+import userTaskRouter from './controllers/user/task';
 
 const app = express();
 const port = process.env.PORT || 5000;
@@ -43,21 +44,16 @@ app.use('/user/food', foodRouter);
 app.use('/user/shopping-list', userShoppingListRouter);
 app.use('/group/shopping-list', groupShoppingListRouter);
 app.use('/group/task', taskRouter);
+app.use('/user/task', userTaskRouter);
+app.use('/user/recipe', recipeRouter);
+app.use('/user/fridge-item', fridgeItemRouter);
+app.use('/user/meal-plan', mealPlanRouter);
 
 // admin routers
 app.use('/admin/auth', adminAuthRouter);
 app.use('/admin/user', adminUserRouter);
 app.use('/admin/category', categoryRouter);
 app.use('/admin/measurement', measurementRouter);
-
-// user routers
-app.use('/user/auth', userAuthRouter);
-app.use('/group', groupRouter);
-app.use('/profile', profileRouter);
-app.use('/food', foodRouter);
-app.use('/recipe', recipeRouter);
-app.use('/fridge-item', fridgeItemRouter);
-app.use('/meal-plan', mealPlanRouter);
 
 // convert error to ApiError, if needed
 app.use(errorConverter);

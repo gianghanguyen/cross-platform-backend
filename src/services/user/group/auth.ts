@@ -55,9 +55,23 @@ const checkIfTaskbelongsToShoppingList = async (shoppingListId: number, taskId: 
   }
 };
 
+const checkIfUserIsCreatorOfShoppingList = async (userId: number, shoppingListId: number) => {
+  const shoppingList = await prisma.shoppingList.findFirst({
+    where: {
+      id: shoppingListId,
+      creatorId: userId,
+    },
+  });
+
+  if (!shoppingList) {
+    throw new ApiError(httpStatus.UNAUTHORIZED, 'Only the creator of this shopping list can perform this action');
+  }
+};
+
 export {
   checkIfUserBelongsToGroup,
   checkIfUserIsGroupAdmin,
   checkIfShoppingListBelongsToGroup,
   checkIfTaskbelongsToShoppingList,
+  checkIfUserIsCreatorOfShoppingList,
 };

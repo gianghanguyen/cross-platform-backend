@@ -35,6 +35,7 @@ const getAllGroupShoppingList = async (userId: number, groupId: number) => {
     include: {
       user: true,
       group: true,
+      Task: true,
     },
   });
 };

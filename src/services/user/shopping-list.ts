@@ -14,6 +14,7 @@ const createUserShoppingList = async (data: Prisma.ShoppingListCreateInput, user
     },
     include: {
       user: true,
+      Task: true,
     },
   });
 };
@@ -28,6 +29,16 @@ const getAllUserShoppingList = async (userId: number) => {
     },
     include: {
       user: true,
+      Task: {
+        include: {
+          food: {
+            include: {
+              category: true,
+              unit: true,
+            },
+          },
+        },
+      },
     },
   });
 };
