@@ -9,7 +9,7 @@ import {
 } from '~/services/admin/measurement';
 
 const adminUnitOfMeasureRouter = Router();
-adminUnitOfMeasureRouter.use(tokenExtractor('ADMIN'));
+// adminUnitOfMeasureRouter.use(tokenExtractor('ADMIN'));
 
 adminUnitOfMeasureRouter.post('/', async (req: Request, res: Response) => {
   res.json(await createUnitOfMeasure(req.body));

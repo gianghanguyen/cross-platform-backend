@@ -37,6 +37,10 @@ const getAllFoodByUser = async (userId: number) => {
     where: {
       userId,
     },
+    include: {
+      category: true,
+      unit: true,
+    },
   });
 };
 

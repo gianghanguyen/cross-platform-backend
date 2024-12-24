@@ -54,6 +54,10 @@ const getAllTask = async (userId: number, groupId: number, shoppingListId: numbe
 
   return await prisma.task.findMany({
     where: { shoppingListId },
+    include: {
+      assignee: true,
+      food: true,
+    },
   });
 };
 

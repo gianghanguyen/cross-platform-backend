@@ -19,7 +19,7 @@ const createGroupShoppingList = async (userId: number, groupId: number, data: Pr
       },
     },
     include: {
-      task: true,
+      Task: true,
     },
   });
 };
@@ -32,7 +32,9 @@ const getAllGroupShoppingList = async (userId: number, groupId: number) => {
       groupId,
     },
     include: {
-      task: true,
+      user: true,
+      group: true,
+      Task: true,
     },
   });
 };
@@ -47,7 +49,7 @@ const getGroupShoppingListInfo = async (userId: number, groupId: number, shoppin
       groupId,
     },
     include: {
-      task: true,
+      Task: true,
     },
   });
 };
