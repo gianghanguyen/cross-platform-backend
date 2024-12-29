@@ -47,7 +47,8 @@ taskRouter.patch('/:id', async (req: CustomRequest, res: Response) => {
 
 taskRouter.delete('/:id', async (req: CustomRequest, res: Response) => {
   const userId = req.user?.id;
-  const { groupId, shoppingListId } = req.body;
+  const groupId = Number(req.query.groupId);
+  const shoppingListId = Number(req.query.shoppingListId);
   const taskId = Number(req.params.id);
   await deleteTask(userId, groupId, shoppingListId, taskId);
   res.status(httpStatus.OK).json();

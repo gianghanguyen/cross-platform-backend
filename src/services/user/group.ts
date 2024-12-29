@@ -29,7 +29,19 @@ const getGroups = async (userId: number) => {
       },
     },
     include: {
-      users: true,
+      users: {
+        include: {
+          user: {
+            include: {
+              Profile: {
+                select: {
+                  name: true, // Include only the name field from the Profile model
+                },
+              },
+            },
+          },
+        },
+      },
     },
   });
 };

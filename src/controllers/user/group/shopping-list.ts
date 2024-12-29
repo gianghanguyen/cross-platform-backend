@@ -22,14 +22,14 @@ groupShoppingListRouter.post('/', async (req: CustomRequest, res: Response) => {
 
 groupShoppingListRouter.get('/', async (req: CustomRequest, res: Response) => {
   const userId = req.user?.id;
-  const { groupId } = req.body;
+  const groupId = Number(req.query.groupId);
   const shoppingLists = await getAllGroupShoppingList(userId, groupId);
   res.status(httpStatus.OK).json(shoppingLists);
 });
 
 groupShoppingListRouter.get('/:id', async (req: CustomRequest, res: Response) => {
   const userId = req.user?.id;
-  const { groupId } = req.body;
+  const groupId = Number(req.query.groupId);
   const shoppingListId = Number(req.params.id);
   const shoppingList = await getGroupShoppingListInfo(userId, groupId, shoppingListId);
   res.status(httpStatus.OK).json(shoppingList);
@@ -45,7 +45,7 @@ groupShoppingListRouter.put('/:id', async (req: CustomRequest, res: Response) =>
 
 groupShoppingListRouter.delete('/:id', async (req: CustomRequest, res: Response) => {
   const userId = req.user?.id;
-  const { groupId } = req.body;
+  const groupId = Number(req.query.groupId);
   const shoppingListId = Number(req.params.id);
   await deleteGroupShoppingList(shoppingListId, groupId, userId);
   res.status(httpStatus.OK).json();
