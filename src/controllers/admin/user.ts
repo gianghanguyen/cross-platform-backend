@@ -1,16 +1,22 @@
 import { Router } from 'express';
-import { deactivateUser } from '~/services/admin/user';
+import { deactivateUser, activateUser } from '~/services/admin/user';
 import { tokenExtractor } from '~/middlewares/auth';
 import { deleteUser, getAllUser } from '~/services/user/user';
 import { getAllProfile } from '~/services/user/profile';
 import httpStatus from 'http-status';
 
 const adminUserRouter = Router();
-// adminUserRouter.use(tokenExtractor('ADMIN'));
+adminUserRouter.use(tokenExtractor('ADMIN'));
 
-adminUserRouter.patch('/deactivate', async (req, res) => {
-  const { id } = req.body;
+adminUserRouter.patch('/:id/deactivate', async (req, res) => {
+  const id = Number(req.params.id);
   await deactivateUser({ id });
+  res.status(httpStatus.OK).json();
+});
+
+adminUserRouter.patch('/:id/activate', async (req, res) => {
+  const id = Number(req.params.id);
+  await activateUser({ id });
   res.status(httpStatus.OK).json();
 });
 

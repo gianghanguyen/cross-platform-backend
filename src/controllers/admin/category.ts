@@ -4,7 +4,7 @@ import { tokenExtractor } from '~/middlewares/auth';
 import { createCategory, deleteCategory, getAllCategory, updateCategory } from '~/services/admin/category';
 
 const adminCategoryRouter = Router();
-// adminCategoryRouter.use(tokenExtractor('ADMIN'));
+adminCategoryRouter.use(tokenExtractor('ADMIN'));
 
 adminCategoryRouter.post('/', async (req: Request, res: Response) => {
   res.json(await createCategory(req.body));

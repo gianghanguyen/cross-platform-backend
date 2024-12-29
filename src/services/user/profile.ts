@@ -14,7 +14,15 @@ const getProfile = async (userId: number) => {
 };
 
 const getAllProfile = async () => {
-  return await prisma.profile.findMany();
+  return await prisma.profile.findMany({
+    include: {
+      user: {
+        select: {
+          isActivated: true,
+        },
+      },
+    },
+  });
 };
 
 const updateProfile = async (userId: number, photoURL: string | null, data: Prisma.ProfileUpdateInput) => {

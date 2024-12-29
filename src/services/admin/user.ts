@@ -5,4 +5,8 @@ const deactivateUser = async (where: Prisma.UserWhereUniqueInput) => {
   return await prisma.user.update({ where, data: { isActivated: false } });
 };
 
-export { deactivateUser };
+const activateUser = async (where: Prisma.UserWhereUniqueInput) => {
+  return await prisma.user.update({ where, data: { isActivated: true } });
+};
+
+export { deactivateUser, activateUser };
