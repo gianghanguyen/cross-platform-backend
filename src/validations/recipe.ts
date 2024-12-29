@@ -12,7 +12,7 @@ const querySchema = Joi.object({
 const createSchema = Joi.object({
   name: Joi.string().required(),
   description: Joi.string().optional(),
-  htmlContent: Joi.string().optional(),
+  htmlContent: Joi.object().optional(),
   foodIds: Joi.array().items(Joi.number()).required(),
 });
 

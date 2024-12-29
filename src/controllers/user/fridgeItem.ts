@@ -17,8 +17,6 @@ fridgeItemRouter.get('/', fridgeItemValidation.query, async (req: Request, res: 
   const query = req.query;
   const args = {
     userId: Number(req.user.id),
-    page: query.page ? Number(query.page) : 1,
-    limit: query.limit ? Number(query.limit) : 10,
   };
   const items = await findFridgeItems(args);
   res.status(httpStatus.OK).json(items);

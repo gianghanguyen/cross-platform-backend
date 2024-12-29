@@ -37,7 +37,6 @@ export const sendNotification = async (pushTokens: string[], title: string, body
       console.error(error);
     }
   }
-  console.log(tickets);
   return tickets;
 };
 

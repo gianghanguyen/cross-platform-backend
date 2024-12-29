@@ -8,13 +8,19 @@ const createFridgeItem = async (data: Prisma.FridgeItemCreateInput) => {
   });
 };
 
-const findFridgeItems = async (query: { userId: number; page: number; limit: number }) => {
+const findFridgeItems = async (query: { userId: number }) => {
   return await prisma.fridgeItem.findMany({
     where: {
       userId: query.userId,
     },
-    skip: query.page ? (query.page - 1) * query.limit : 0,
-    take: query.limit ? query.limit : 10,
+    include: {
+      food: {
+        include: {
+          category: true,
+          unit: true,
+        },
+      },
+    },
   });
 };
 

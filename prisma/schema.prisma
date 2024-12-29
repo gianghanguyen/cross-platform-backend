@@ -172,7 +172,7 @@ model Task {
 model Recipe {
   id          Int      @id @default(autoincrement())
   name        String
-  description String?
+  description String?  @db.Text
   htmlContent String?
   foods       Food[]
   creatorId   Int
