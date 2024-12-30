@@ -1,6 +1,6 @@
 import { Response, Router } from 'express';
 import { tokenExtractor, CustomRequest } from '~/middlewares/auth';
-import { createGroup, groupInfo, updateGroup, getGroups, addMembers, removeMembers } from '~/services/user/group';
+import { createGroup, groupInfo, updateGroup, getGroups, addMembers, removeMembers, deleteGroup } from '~/services/user/group';
 import { groupValidation } from '~/validations/group';
 import upload from '~/middlewares/multer';
 import httpStatus from 'http-status-codes';
@@ -63,5 +63,12 @@ groupRouter.patch(
     res.status(httpStatus.OK).json(updatedGroup);
   },
 );
+
+groupRouter.delete('/:id', async (req: CustomRequest, res: Response) => {
+  const user = req.user;
+  const groupId = req.params.id;
+  await deleteGroup(Number(groupId), Number(user.id));
+  res.status(httpStatus.NO_CONTENT).send();
+});
 
 export default groupRouter;

@@ -88,14 +88,14 @@ model Group {
   users        UserGroup[]
   createdAt    DateTime       @default(now())
   updatedAt    DateTime       @updatedAt
-  ShoppingList ShoppingList[]
+  ShoppingList ShoppingList[] 
 }
 
 model UserGroup {
   userId  Int
   user    User      @relation(fields: [userId], references: [id])
   groupId Int
-  group   Group     @relation(fields: [groupId], references: [id])
+  group   Group     @relation(fields: [groupId], references: [id], onDelete: Cascade)
   role    GroupRole @default(MEMBER)
 
   @@id([userId, groupId])
@@ -149,7 +149,7 @@ model ShoppingList {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   user      User     @relation(fields: [creatorId], references: [id])
-  group     Group?   @relation(fields: [groupId], references: [id])
+  group     Group?   @relation(fields: [groupId], references: [id], onDelete: Cascade)
   Task      Task[]
 }
 
