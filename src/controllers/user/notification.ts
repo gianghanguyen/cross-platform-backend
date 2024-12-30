@@ -9,7 +9,6 @@ notificationTokenRouter.use(tokenExtractor('USER'));
 
 notificationTokenRouter.post('/', async (req: CustomRequest, res) => {
   const userId = Number(req.user!.id);
-  console.log(req.body);
   const { token } = req.body;
   const notificationToken = await saveNotificationToken(userId, token.data);
   res.status(httpStatus.CREATED).json(notificationToken);

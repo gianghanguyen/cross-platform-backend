@@ -1,4 +1,4 @@
-import { Prisma, PrismaClient } from '@prisma/client';
+import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
@@ -6,25 +6,31 @@ const createRecipe = async (
   data: { name: string; description: string; htmlContent: string; foodIds: number[] },
   userId: number,
 ) => {
-  return prisma.recipe.create({
-    data: {
-      name: data.name,
-      description: data.description,
-      htmlContent: data.htmlContent,
-      foods: {
-        connect: data.foodIds.map((id: number) => ({ id })),
-      },
-      creator: {
-        connect: {
-          id: userId,
+  try {
+    console.log("description", data.description);
+    const recipe = await prisma.recipe.create({
+      data: {
+        name: data.name,
+        description: data.description,
+        htmlContent: data.htmlContent,
+        foods: {
+          connect: data.foodIds.map((id: number) => ({ id: Number(id) })),
+        },
+        creator: {
+          connect: {
+            id: userId,
+          },
         },
       },
-    },
-    include: {
-      creator: true,
-      foods: true,
-    },
-  });
+      include: {
+        creator: true,
+        foods: true,
+      },
+    });
+    return recipe;
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 const findRecipeById = async (id: number) => {
@@ -39,8 +45,16 @@ const findRecipeById = async (id: number) => {
   });
 };
 
-const findRecipes = async (query: Prisma.RecipeFindManyArgs) => {
-  return await prisma.recipe.findMany(query);
+const findRecipes = async (userId: number) => {
+  return prisma.recipe.findMany({
+    where: {
+      creatorId: userId,
+    },
+    include: {
+      creator: true,
+      foods: true,
+    },
+  });
 };
 
 const updateRecipe = async (id: number, userId: number, data: { foodIds?: number[]; [key: string]: any }) => {
