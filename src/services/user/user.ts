@@ -3,7 +3,16 @@ import { Prisma, PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 const createUser = async (data: Prisma.UserCreateInput) => {
-  return await prisma.user.create({ data });
+  return await prisma.user.create({
+    data: {
+      ...data,
+      Profile: {
+        create: {
+          name: data.email.split('@')[0],
+        },
+      },
+    },
+  });
 };
 
 const getUser = async (data: Prisma.UserWhereUniqueInput) => {
